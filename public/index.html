@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clínica Fisio</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+    <main id="login-view" class="login-layout">
+        <form id="login-form" class="card login-card">
+            <p class="eyebrow">GESTÃO DA CLÍNICA</p>
+            <h1>Clínica Fisio</h1>
+            <p class="muted">Entre com suas credenciais para acessar o sistema.</p>
+            <label for="login-email">E-mail</label>
+            <input id="login-email" name="email" type="email" autocomplete="username" required>
+            <label for="login-password">Senha</label>
+            <input id="login-password" name="senha" type="password" autocomplete="current-password" required>
+            <button type="submit">Entrar</button>
+            <p id="login-message" class="message" role="alert"></p>
+        </form>
+    </main>
+
+    <div id="app-view" class="app-layout" hidden>
+        <header class="topbar">
+            <a class="brand" href="#inicio">Clínica Fisio</a>
+            <div class="user-area">
+                <span id="user-name"></span>
+                <button id="logout-button" class="button-secondary" type="button">Sair</button>
+            </div>
+        </header>
+        <div class="workspace">
+            <nav class="navigation" aria-label="Recursos do sistema">
+                <button type="button" data-page="inicio" class="nav-button active">Início</button>
+                <button type="button" data-page="pacientes" class="nav-button">Pacientes</button>
+                <button type="button" data-page="planos" class="nav-button">Planos</button>
+                <button type="button" data-page="sessoes" class="nav-button">Sessões</button>
+            </nav>
+
+            <main class="content">
+                <section id="page-inicio" class="page">
+                    <p class="eyebrow">VISÃO GERAL</p>
+                    <h1>Bem-vindo, <span id="welcome-name"></span></h1>
+                    <p class="muted">Acesse os recursos para organizar pacientes, tratamentos e agendamentos.</p>
+                    <div class="shortcut-grid">
+                        <button class="shortcut card" type="button" data-page="pacientes">
+                            <strong>Pacientes</strong><span>Consultar e atualizar cadastros</span>
+                        </button>
+                        <button class="shortcut card" type="button" data-page="planos">
+                            <strong>Planos</strong><span>Associar tratamentos aos pacientes</span>
+                        </button>
+                        <button class="shortcut card" type="button" data-page="sessoes">
+                            <strong>Sessões</strong><span>Agendar e atualizar atendimentos</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="page-pacientes" class="page" hidden>
+                    <div class="page-heading">
+                        <div><p class="eyebrow">CADASTROS</p><h1>Pacientes</h1></div>
+                    </div>
+                    <form id="patient-search" class="search-form">
+                        <label class="sr-only" for="patient-term">Buscar paciente</label>
+                        <input id="patient-term" type="search" placeholder="Buscar por nome, e-mail ou telefone">
+                        <button type="submit">Buscar</button>
+                    </form>
+                    <form id="patient-form" class="card form-grid">
+                        <h2 id="patient-form-title">Novo paciente</h2>
+                        <input name="id" type="hidden">
+                        <label>Nome<input name="nome" maxlength="100" required></label>
+                        <label>CPF<input name="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00"></label>
+                        <label>Data de nascimento<input name="dataNascimento" type="date" required></label>
+                        <label>Telefone<input name="telefone" maxlength="20" required></label>
+                        <label>E-mail<input name="email" type="email" maxlength="100"></label>
+                        <label class="wide">Endereço<input name="endereco" maxlength="255"></label>
+                        <div class="form-actions wide">
+                            <button type="submit">Salvar paciente</button>
+                            <button id="patient-cancel" class="button-secondary" type="button" hidden>Cancelar edição</button>
+                        </div>
+                        <p id="patient-message" class="message wide" role="status"></p>
+                    </form>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Nome</th><th>Nascimento</th><th>Telefone</th><th>E-mail</th><th>Endereço</th><th>Ação</th></tr></thead>
+                            <tbody id="patients-table"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="page-planos" class="page" hidden>
+                    <p class="eyebrow">TRATAMENTOS</p><h1>Planos de tratamento</h1>
+                    <form id="plan-form" class="card form-grid">
+                        <h2>Novo plano</h2>
+                        <label class="wide">Paciente<select name="idPaciente" required></select></label>
+                        <label class="wide">Descrição<input name="descricao" maxlength="255" required></label>
+                        <label class="wide">Objetivo<input name="objetivo" maxlength="255"></label>
+                        <label>Quantidade de sessões<input name="quantidadeSessoes" type="number" min="1" step="1" required></label>
+                        <label>Data de início<input name="dataInicio" type="date" required></label>
+                        <label>Status<select name="status" required>
+                            <option value="Em andamento">Em andamento</option>
+                            <option value="Concluído">Concluído</option>
+                            <option value="Pausado">Pausado</option>
+                        </select></label>
+                        <div class="form-actions wide"><button type="submit">Salvar plano</button></div>
+                        <p id="plan-message" class="message wide" role="status"></p>
+                    </form>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Paciente</th><th>Descrição</th><th>Objetivo</th><th>Sessões</th><th>Início</th><th>Status</th></tr></thead>
+                            <tbody id="plans-table"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="page-sessoes" class="page" hidden>
+                    <p class="eyebrow">AGENDA</p><h1>Sessões</h1>
+                    <form id="session-form" class="card form-grid">
+                        <h2>Agendar sessão</h2>
+                        <label class="wide">Plano de tratamento<select name="idPlano" required></select></label>
+                        <label>Data<input name="dataSessao" type="date" required></label>
+                        <label>Horário<input name="horaSessao" type="time" required></label>
+                        <label>Status<select name="status" required>
+                            <option value="Agendada">Agendada</option>
+                            <option value="Realizada">Realizada</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select></label>
+                        <label class="wide">Observações<textarea name="observacoes" rows="2"></textarea></label>
+                        <div class="form-actions wide"><button type="submit">Agendar sessão</button></div>
+                        <p id="session-message" class="message wide" role="status"></p>
+                    </form>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Data e hora</th><th>Paciente</th><th>Dados do paciente</th><th>Plano de tratamento</th><th>Responsável</th><th>Status</th><th>Observações</th><th>Atualizar data</th></tr></thead>
+                            <tbody id="sessions-table"></tbody>
+                        </table>
+                    </div>
+                </section>
+                <p id="global-message" class="message" role="alert"></p>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
